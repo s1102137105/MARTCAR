@@ -1,0 +1,25 @@
+<?php
+    $product_name=$_POST['product_name'];
+    $product_price=$_POST['product_price'];
+    $username='s1102137105';
+    $passwd='yoga123';
+    $dsn='mysql:dbname=s1102137105;host=db.mis.kuas.edu.tw;charset=utf8';
+    try{
+        $conn=new PDO($dsn, $username, $passwd);
+        $sql="INSERT INTO `product`(`product_name`, `product_price`) VALUES ('$product_name','$product_price')";
+        $stmt=$conn->exec($sql);
+        echo "新增成功...畫面轉跳中...";
+    }  catch (Exception $ex){
+        echo $ex->getMessage();
+    }
+?>
+<!DOCTYPE html>
+
+<html lang="zh-tw">
+    <head>
+        <meta http-equiv="refresh" content="1;url=menu_manage.php" />
+    </head>
+<body>
+    
+</body>
+</html>
