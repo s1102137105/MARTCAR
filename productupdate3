@@ -1,0 +1,32 @@
+<?php
+    session_start();
+    if($_SESSION['id']==null)
+    {
+        header("Location:login.html");
+    }
+        else {
+    $product_id=$_POST['product_id'];
+    $product_name=$_POST['product_name'];
+    $product_price=$_POST['product_price'];
+    $username='s1102137105';
+    $passwd='yoga123';
+    $dsn='mysql:dbname=s1102137105;host=db.mis.kuas.edu.tw;charset=utf8';
+    try{
+        $conn=new PDO($dsn, $username, $passwd);
+        $sql="UPDATE `product` SET `product_name`='$product_name',`product_price`='$product_price' WHERE `product_id`='$product_id'";
+        $stmt=$conn->query($sql);
+        echo "修改成功...畫面轉跳中...";
+    }  catch (Exception $ex){
+        echo $ex->getMessage();
+    }
+?>
+<!DOCTYPE html> 
+<html lang="zh-tw">
+    <head>
+        <meta http-equiv="refresh" content="1;url=menu_manage.php" />
+    </head>
+<body>
+    
+</body>
+</html>
+<?php }?>
