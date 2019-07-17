@@ -1,0 +1,31 @@
+<?php
+    session_start();
+    if($_SESSION['id']==null)
+    {
+        header("Location:login.html");
+    }
+        else {
+    $product_id=$_POST['product_id'];
+    $username='s1102137105';
+    $passwd='yoga123';
+    $dsn='mysql:dbname=s1102137105;host=db.mis.kuas.edu.tw;charset=utf8';
+    try{
+        $conn=new PDO($dsn, $username, $passwd);
+        for($i=0;$i<count($product_id);$i++){
+            $sql="DELETE FROM `product` WHERE `product_id`='$product_id[$i]'";
+            $count=$conn->exec($sql);
+        }echo "刪除成功...畫面轉跳中...";
+    }  catch (Exception $ex){
+        echo $ex->getMessage();
+    }
+?>
+<!DOCTYPE html>
+<html lang="zh-tw">
+    <head>
+       <meta http-equiv="refresh" content="1;url=menu_manage.php" />
+    </head>
+<body>
+    
+</body>
+</html>
+        <?php }?> 
