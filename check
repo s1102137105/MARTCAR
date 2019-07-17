@@ -1,0 +1,48 @@
+<?php
+    session_start();
+    $db_user = 's1102137105';
+    $db_password = 'yoga123';
+    $dsn = "mysql:host=db.mis.kuas.edu.tw;dbname=s1102137105;charset=utf8";
+
+    try{
+        $link=new PDO($dsn, $db_user , $db_password);
+    } catch (Exception $ex) {
+        printf("DatabaseError:%s",$ex->getMessage());
+    }
+   $id=$_POST['id'];
+    $pass=$_POST['pass'];
+    
+    $sql="SELECT COUNT(*) as CNT FROM `login` WHERE `id`='$id' && `pass`='$pass'";
+    $result=$link->query($sql);
+    foreach ($result ->fetchAll(PDO::FETCH_ASSOC) as $row) {
+        if ($row['CNT'] == 1 ) 
+        {
+            $_SESSION['id']=$id;
+?>
+    <html>
+        <head>        
+        </head>
+        <body>
+            <SCRIPT type="text/javascript" charset="UTF-8" >
+                alert("登入成功");
+            </SCRIPT>
+            <?php echo '<meta http-equiv=REFRESH CONTENT=0;url=menu_manage.php>';
+        } 
+            else 
+            {?>
+            <SCRIPT type="text/javascript" charset="UTF-8" >
+                alert("登入失敗，帳號或密碼有誤");
+            </SCRIPT>
+            <?php echo '<meta http-equiv=REFRESH CONTENT=0;url=login.html>';
+            }
+    }   
+    $psql="SELECT `position` FROM `login` WHERE `id`='$id'";
+    $result=$link->query($psql);
+    foreach ($result->fetchAll(PDO::FETCH_ASSOC) as $row) {
+        $_SESSION['position']=$row['position'];
+    }
+    $link=null;
+?>
+
+    </body>
+</html>
