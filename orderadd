@@ -1,0 +1,46 @@
+<?php
+    $product_name=$_POST['product_name'];
+    $haveq=$_POST['haveq'];
+    $order_name=$_POST['order_name'];
+    $order_cell=$_POST['order_cell'];
+    $order_address=$_POST['order_address'];
+    $order_pay=$_POST['order_pay'];
+    $total=$_POST['total'];
+    $username='s1102137105';
+    $passwd='yoga123';
+    $dsn='mysql:dbname=s1102137105;host=db.mis.kuas.edu.tw;charset=utf8';
+    try{
+        $conn=new PDO($dsn, $username, $passwd);
+        for($j=0;$j<count($product_name);$j++){
+            $sql4="SELECT `product_id` FROM `product` WHERE `product_name`='$product_name[$j]'";
+            $stmt4=$conn->query($sql4);
+            foreach ($stmt4 ->fetchAll(PDO::FETCH_ASSOC) as $row4) {
+                $product_id[]=$row4['product_id'];
+            }
+        }
+        $sql2="INSERT INTO `order`(`order_name`, `order_cell`, `order_address`, `order_pay`) VALUES ('$order_name','$order_cell','$order_address','$order_pay')";
+        $stmt2=$conn->query($sql2);
+        $sql3="SELECT `order_id` FROM `order` WHERE `order_name`='$order_name'";
+        $stmt3=$conn->query($sql3);
+        foreach ($stmt3 ->fetchAll(PDO::FETCH_ASSOC) as $row3) {
+            $order_id=$row3['order_id'];
+        }
+        for($i=0;$i<count($product_id);$i++){
+        $sql="INSERT INTO `orderline`( `o_id`, `p_id`, `orderline_quty`, `orderline_total`, `orderline_status`) VALUES ('$order_id',' $product_id[$i]','$haveq[$i]','$total[$i]', '未處理')";
+        $stmt=$conn->exec($sql);
+        }
+        echo "購買成功...畫面轉跳中...";
+    }  catch (Exception $ex){
+        echo $ex->getMessage();
+    }
+?>
+<!DOCTYPE html>
+
+<html lang="zh-tw">
+    <head>
+        <meta http-equiv="refresh" content="1;url=menu.php" />
+    </head>
+<body>
+    
+</body>
+</html>
