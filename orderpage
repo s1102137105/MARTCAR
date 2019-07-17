@@ -1,0 +1,135 @@
+<?php
+    $product_id=$_POST['product_id'];
+    $q=$_POST['q'];
+    $sum=0;
+    $username='s1102137105';
+    $passwd='yoga123';
+    $dsn='mysql:dbname=s1102137105;host=db.mis.kuas.edu.tw;charset=utf8';
+    try{
+        $conn=new PDO($dsn, $username, $passwd); 
+        for($i=0;$i<count($product_id);$i++){
+            $sql="SELECT * FROM `product` WHERE `product_id`='$product_id[$i]'";
+            $stmt=$conn->query($sql);
+            foreach ($stmt ->fetchAll(PDO::FETCH_ASSOC) as $row){
+                if($q[$i]!=0){
+                    $haveq[]=$q[$i];
+                    $product_name[]=$row['product_name'];
+                    $product_price[]=$row['product_price'];
+                }
+            }
+        }
+        for($k=0;$k<count($product_name);$k++){
+            $sum += $haveq[$k]*$product_price[$k];
+        }
+    }  catch (Exception $ex){
+        echo $ex->getMessage();
+    }
+?>
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>填寫資料</title>
+
+    <!-- Bootstrap -->
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+      <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#"><img width=70 src="123.png"></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="tabbable collapse navbar-collapse"> <!-- Only required for left/right tabs -->
+  <ul class="nav nav-tabs">
+  <li class="active">
+    <a href="index.php"><span class="glyphicon glyphicon-home"></span> Home</a>
+  </li>
+  <li><a href="menu.php">Menu</a></li>
+  <div class="nav navbar-nav navbar-right">
+    <li><a href="orderline.php">管理</a></li>
+  </ul>
+</div>
+</ul>
+  
+</div>
+      
+  </div><!-- /.container-fluid -->
+</nav>
+      <h3><p class="text-center">填寫資料</p></h3>
+    <div class="col-md-2"></div> 
+    <form action="orderadd.php" method="post">
+        
+        <div class="col-md-8 container">
+            <p class="text-left">購買清單</p>
+            <table class="table">
+                <tr>
+                    <td>品名</td>
+                    <td>單價</td>
+                    <td>數量</td>
+                    <td>小計</td>
+                </tr>
+            <tr>
+                <?php for($j=0;$j<count($haveq);$j++){?>
+                <td><?php echo $product_name[$j];?><input type="hidden" name="product_name[]" value="<?php echo $product_name[$j];?>"></td>
+                <td><?php echo $product_price[$j];?></td>
+                <td><?php echo $haveq[$j];?><input type="hidden" name="haveq[]" value="<?php echo $haveq[$j];?>"></td>
+                <td><?php echo $haveq[$j]*$product_price[$j];?><input type="hidden" name="total[]" value="<?php echo $haveq[$j]*$product_price[$j];?>"></td>
+            </tr>  
+            <?php }?>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>總計</td>
+                <td><?php echo $sum;?><input type="hidden" name="sum" value="<?php echo $sum;?>"></td>
+            </tr>
+            </table>
+            <table class="table table-striped text-center">
+                <tr>
+                    <td>姓名<font color="red">*</font></td>
+                    <td><input type="text" name="order_name" required></td>
+                </tr> 
+                <tr>
+                    <td>手機  <font color="red">*</font></td>
+                    <td><input type="text" name="order_cell" required pattern="[0][9][0-9]{8}" maxlength="10"/></td>
+                </tr>
+                 <tr>
+                    <td>地址  <font color="red">*</font></td>
+                    <td><input type="text" name="order_address" required/></td>
+                </tr>
+                <tr>
+                    <td>付款方式:  <font color="red">*</font></td>
+                    <td><select name="order_pay" required><option hidden></option><option>貨到付款</option><option>到店取貨</option></select></td>
+                </tr>
+            </table>
+            <div align="center">
+                <input type="submit" class="btn btn-primary" value="確認"/>
+            </div>
+        </div>
+    </form>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="http://fs.mis.kuas.edu.tw/~s1102137105/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
+  </body>
+</html>
